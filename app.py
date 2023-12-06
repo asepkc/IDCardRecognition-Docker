@@ -6,6 +6,7 @@ import base64
 import json
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 from idsdk import getMachineCode
 from idsdk import setActivation
 from idsdk import initSDK
@@ -35,8 +36,11 @@ print("init: ", ret)
 
 # Start Flask project
 app = Flask(__name__) 
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/idcard_recognition', methods=['POST'])
+@cross_origin()
 def idcard_recognition():
     try:
         file = request.files['file']
@@ -58,6 +62,7 @@ def idcard_recognition():
     return response
 
 @app.route('/idcard_recognition_base64', methods=['POST'])
+@cross_origin()
 def idcard_recognition_base64():
     try:
         content = request.get_json()
